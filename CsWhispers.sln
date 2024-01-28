@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsWhispers.Generator", "CsWhispers.Generator\CsWhispers.Generator.csproj", "{30CE2E3A-61D4-4D06-9280-DC73CA4C32E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsWhispers.Tests", "CsWhispers.Tests\CsWhispers.Tests.csproj", "{DE6EC43A-33E7-48D5-AB5A-848F86F26448}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsWhispers.Sample", "CsWhispers.Sample\CsWhispers.Sample.csproj", "{F3EFEF07-0F1A-4162-A2D8-56CE9028CB9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30CE2E3A-61D4-4D06-9280-DC73CA4C32E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30CE2E3A-61D4-4D06-9280-DC73CA4C32E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30CE2E3A-61D4-4D06-9280-DC73CA4C32E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30CE2E3A-61D4-4D06-9280-DC73CA4C32E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE6EC43A-33E7-48D5-AB5A-848F86F26448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE6EC43A-33E7-48D5-AB5A-848F86F26448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE6EC43A-33E7-48D5-AB5A-848F86F26448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE6EC43A-33E7-48D5-AB5A-848F86F26448}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3EFEF07-0F1A-4162-A2D8-56CE9028CB9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3EFEF07-0F1A-4162-A2D8-56CE9028CB9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3EFEF07-0F1A-4162-A2D8-56CE9028CB9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3EFEF07-0F1A-4162-A2D8-56CE9028CB9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,108 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>CsWhispers</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>@_RastaMouse</Authors>
+        <Company>CsWhispers</Company>
+        <Product>CsWhispers</Product>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="CsWhispers.Generator.csproj.DotSettings" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Source\Structs.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Source\Generic.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Source\Syscalls.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Source\CLIENT_ID.cs" />
+      <EmbeddedResource Include="Source\CLIENT_ID.cs" />
+      <Compile Remove="Source\Constants.cs" />
+      <EmbeddedResource Include="Source\Constants.cs" />
+      <Compile Remove="Source\DynamicInvoke.cs" />
+      <EmbeddedResource Include="Source\DynamicInvoke.cs" />
+      <Compile Remove="Source\HANDLE.cs" />
+      <EmbeddedResource Include="Source\HANDLE.cs" />
+      <Compile Remove="Source\IO_STATUS_BLOCK.cs" />
+      <EmbeddedResource Include="Source\IO_STATUS_BLOCK.cs" />
+      <Compile Remove="Source\MEMORY_BASIC_INFORMATION.cs" />
+      <EmbeddedResource Include="Source\MEMORY_BASIC_INFORMATION.cs" />
+      <Compile Remove="Source\MEMORY_INFORMATION_CLASS.cs" />
+      <EmbeddedResource Include="Source\MEMORY_INFORMATION_CLASS.cs" />
+      <Compile Remove="Source\Native.cs" />
+      <EmbeddedResource Include="Source\Native.cs" />
+      <Compile Remove="Source\NtAllocateVirtualMemory.cs" />
+      <EmbeddedResource Include="Source\NtAllocateVirtualMemory.cs" />
+      <Compile Remove="Source\NtClose.cs" />
+      <EmbeddedResource Include="Source\NtClose.cs" />
+      <Compile Remove="Source\NtCreateSection.cs" />
+      <EmbeddedResource Include="Source\NtCreateSection.cs" />
+      <Compile Remove="Source\NtFreeVirtualMemory.cs" />
+      <EmbeddedResource Include="Source\NtFreeVirtualMemory.cs" />
+      <Compile Remove="Source\NtMapViewOfSection.cs" />
+      <EmbeddedResource Include="Source\NtMapViewOfSection.cs" />
+      <Compile Remove="Source\NtOpenFile.cs" />
+      <EmbeddedResource Include="Source\NtOpenFile.cs" />
+      <Compile Remove="Source\NtOpenProcess.cs" />
+      <EmbeddedResource Include="Source\NtOpenProcess.cs" />
+      <Compile Remove="Source\NtProtectVirtualMemory.cs" />
+      <EmbeddedResource Include="Source\NtProtectVirtualMemory.cs" />
+      <Compile Remove="Source\NtQueryVirtualMemory.cs" />
+      <EmbeddedResource Include="Source\NtQueryVirtualMemory.cs" />
+      <Compile Remove="Source\NtReadVirtualMemory.cs" />
+      <EmbeddedResource Include="Source\NtReadVirtualMemory.cs" />
+      <Compile Remove="Source\NTSTATUS.cs" />
+      <EmbeddedResource Include="Source\NTSTATUS.cs" />
+      <Compile Remove="Source\NtUnmapViewOfSection.cs" />
+      <EmbeddedResource Include="Source\NtUnmapViewOfSection.cs" />
+      <Compile Remove="Source\NtWriteVirtualMemory.cs" />
+      <EmbeddedResource Include="Source\NtWriteVirtualMemory.cs" />
+      <Compile Remove="Source\OBJECT_ATTRIBUTES.cs" />
+      <EmbeddedResource Include="Source\OBJECT_ATTRIBUTES.cs" />
+      <Compile Remove="Source\PCWSTR.cs" />
+      <EmbeddedResource Include="Source\PCWSTR.cs" />
+      <Compile Remove="Source\PWSTR.cs" />
+      <EmbeddedResource Include="Source\PWSTR.cs" />
+      <Compile Remove="Source\SECTION_INHERIT.cs" />
+      <EmbeddedResource Include="Source\SECTION_INHERIT.cs" />
+      <Compile Remove="Source\Syscall.cs" />
+      <EmbeddedResource Include="Source\Syscalls.cs" />
+      <Compile Remove="Source\UNICODE_STRING.cs" />
+      <EmbeddedResource Include="Source\UNICODE_STRING.cs" />
+      <Compile Remove="Source\Usings.cs" />
+      <EmbeddedResource Include="Source\Usings.cs" />
+    </ItemGroup>
+
+</Project>
