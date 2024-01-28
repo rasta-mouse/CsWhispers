@@ -126,3 +126,7 @@ internal static class Program
 - Add 32-bit support.
 - Add additional configuration options to choose between direct and indirect syscalls.
 - Implicitly add structs/enums for APIs without having to declare them in `CsWhispers.txt`.
+
+## Acknowledgements
+
+This project was inspired by the previous versions of SysWhipsers and SharpWhispers in particular.  So hat's off to [@Jackson_T](https://twitter.com/Jackson_T), [@KlezVirus](https://twitter.com/KlezVirus), [@d_glenx](https://twitter.com/d_glenx), and everyone else that has contribured code and/or ideas.
