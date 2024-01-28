@@ -124,6 +124,7 @@ internal static class Program
 ## TODO
 
 - Add 32-bit support.
+- Randomise API hashes on each build.
 - Add additional configuration options to choose between direct and indirect syscalls.
 - Implicitly add structs/enums for APIs without having to declare them in `CsWhispers.txt`.
 
