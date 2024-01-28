@@ -58,7 +58,7 @@ PWSTR
 PCWSTR
 ```
 
-See the project Wiki for a full list of supported APIs.
+**See the project Wiki for a full list of supported APIs.**
 
 Global namespaces are automatically added to allow for clean code.
 
@@ -85,3 +85,44 @@ public static unsafe void Main()
     Console.WriteLine("HANDLE: 0x{0:X}", hProcess.Value.ToInt64());
 }
 ```
+
+## D/Invoke
+
+CsWhispers includes a minimalised version of D/Invoke, so you may also call `Generic.GetLibraryAddress`, `Generic.DynamicFunctionInvoke`, etc.
+
+## Extending
+
+All of the generated code goes into a partial `CsWhispers.Syscalls` class, which you can extend to add your own APIs. For example, create `MyAPIs.cs` and add:
+
+```c#
+namespace CsWhispers;
+
+public static partial class Syscalls
+{
+    public static NTSTATUS NtCreateThreadEx()
+    {
+        // whatever
+        return new NTSTATUS(0);
+    }
+}
+```
+
+This can then be called in your main code without having to add any additional using statements.
+
+```c#
+namespace ConsoleApp1;
+
+internal static class Program
+{
+    public static void Main()
+    {
+        var status = NtCreateThreadEx();
+    }
+}
+```
+
+## TODO
+
+- Add 32-bit support.
+- Add additional configuration options to choose between direct and indirect syscalls.
+- Implicitly add structs/enums for APIs without having to declare them in `CsWhispers.txt`.
