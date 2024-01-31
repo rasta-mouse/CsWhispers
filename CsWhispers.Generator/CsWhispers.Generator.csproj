@@ -9,7 +9,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <PackageId>CsWhispers</PackageId>
-        <Version>0.0.2</Version>
+        <Version>0.0.3</Version>
         <Authors>@_RastaMouse</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -57,7 +57,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Source\Syscalls.cs" />
+      <Compile Remove="Source\Syscall.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -107,16 +107,22 @@
       <EmbeddedResource Include="Source\OBJECT_ATTRIBUTES.cs" />
       <Compile Remove="Source\PCWSTR.cs" />
       <EmbeddedResource Include="Source\PCWSTR.cs" />
+      <Compile Remove="Source\PS_ATTRIBUTE_LIST.cs" />
+      <EmbeddedResource Include="Source\PS_ATTRIBUTE_LIST.cs" />
       <Compile Remove="Source\PWSTR.cs" />
       <EmbeddedResource Include="Source\PWSTR.cs" />
       <Compile Remove="Source\SECTION_INHERIT.cs" />
       <EmbeddedResource Include="Source\SECTION_INHERIT.cs" />
-      <Compile Remove="Source\Syscall.cs" />
+      <Compile Remove="Source\Syscalls.cs" />
       <EmbeddedResource Include="Source\Syscalls.cs" />
       <Compile Remove="Source\UNICODE_STRING.cs" />
       <EmbeddedResource Include="Source\UNICODE_STRING.cs" />
+      <Compile Remove="Source\USER_THREAD_START_ROUTINE.cs" />
+      <EmbeddedResource Include="Source\USER_THREAD_START_ROUTINE.cs" />
       <Compile Remove="Source\Usings.cs" />
       <EmbeddedResource Include="Source\Usings.cs" />
+      <Compile Remove="Source\NtCreateThreadEx.cs" />
+      <EmbeddedResource Include="Source\NtCreateThreadEx.cs" />
     </ItemGroup>
 
 </Project>
