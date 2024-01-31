@@ -19,7 +19,7 @@ Add the latest NuGet package to your project and allow unsafe code.
 
     <!-- CsWhispers package -->
     <ItemGroup>
-      <PackageReference Include="CsWhispers" Version="0.0.2" />
+      <PackageReference Include="CsWhispers" Version="0.0.3" />
     </ItemGroup>
 
     <!-- Allow unsafe code -->
