@@ -6,6 +6,8 @@ public static unsafe partial class Syscalls
 {
     private const string ZwMapViewOfSectionHash = "C72A45E418708097B7D23865D6187D5E";
 
+    private static int NtMapViewOfSectionJit() { return 5; }
+
     public static NTSTATUS NtMapViewOfSection(
         HANDLE sectionHandle,
         HANDLE processHandle,
@@ -22,15 +24,7 @@ public static unsafe partial class Syscalls
 
         fixed (byte* buffer = stub)
         {
-            var ptr = (IntPtr)buffer;
-            var size = new IntPtr(stub.Length);
-            
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtMapViewOfSectionJit), buffer, stub.Length);
 
             var ntMapViewOfSection = Marshal.GetDelegateForFunctionPointer<ZwMapViewOfSection>(ptr);
             
@@ -45,13 +39,6 @@ public static unsafe partial class Syscalls
                 inheritDisposition,
                 allocationType, 
                 win32Protect);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

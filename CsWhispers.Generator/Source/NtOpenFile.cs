@@ -6,6 +6,8 @@ public static unsafe partial class Syscalls
 {
     private const string ZwOpenFileHash = "568DFAF213A08F28C9D58D1234D4218A";
 
+    private static int NtOpenFileJit() { return 5; }
+
     public static NTSTATUS NtOpenFile(
         HANDLE* fileHandle,
         uint desiredAccess,
@@ -18,15 +20,7 @@ public static unsafe partial class Syscalls
 
         fixed (byte* buffer = stub)
         {
-            var ptr = (IntPtr)buffer;
-            var size = new IntPtr(stub.Length);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtOpenFileJit), buffer, stub.Length);
 
             var ntOpenFile = Marshal.GetDelegateForFunctionPointer<ZwOpenFile>(ptr);
 
@@ -37,13 +31,6 @@ public static unsafe partial class Syscalls
                 ioStatusBlock,
                 shareAccess,
                 openOptions);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

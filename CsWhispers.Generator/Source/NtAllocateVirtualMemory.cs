@@ -6,6 +6,8 @@ public static unsafe partial class Syscalls
 {
     private const string ZwAllocateVirtualMemoryHash = "D80FB8F3EA00B69B2CAAB144EB70BE34";
 
+    private static int NtAllocateVirtualMemoryJit() { return 5; }
+
     public static NTSTATUS NtAllocateVirtualMemory(
         HANDLE processHandle,
         void* baseAddress,
@@ -18,15 +20,7 @@ public static unsafe partial class Syscalls
 
         fixed (byte* buffer = stub)
         {
-            var ptr = (IntPtr)buffer;
-            var size = new IntPtr(stub.Length);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtAllocateVirtualMemoryJit), buffer, stub.Length);
 
             var ntAllocateVirtualMemory = Marshal.GetDelegateForFunctionPointer<ZwAllocateVirtualMemory>(ptr);
 
@@ -37,13 +31,6 @@ public static unsafe partial class Syscalls
                 regionSize,
                 allocationType,
                 protect);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

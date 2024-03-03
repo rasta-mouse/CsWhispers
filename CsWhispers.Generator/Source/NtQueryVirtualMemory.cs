@@ -6,6 +6,8 @@ public static unsafe partial class Syscalls
 {
     private const string ZwQueryVirtualMemoryHash = "0F4ECCBB2DFD9932319A2C18098B34E6";
 
+    private static int NtQueryVirtualMemoryJit() { return 5; }
+
     public static NTSTATUS NtQueryVirtualMemory(
         HANDLE processHandle,
         void* baseAddress,
@@ -18,15 +20,7 @@ public static unsafe partial class Syscalls
 
         fixed (byte* temp = stub)
         {
-            var ptr = (IntPtr)temp;
-            var size = new IntPtr(stub.Length);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtQueryVirtualMemoryJit), temp, stub.Length);
 
             var ntQueryVirtualMemory = Marshal.GetDelegateForFunctionPointer<ZwQueryVirtualMemory>(ptr);
 
@@ -37,13 +31,6 @@ public static unsafe partial class Syscalls
                 buffer,
                 length,
                 resultLength);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

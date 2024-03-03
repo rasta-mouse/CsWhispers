@@ -6,6 +6,8 @@ public static unsafe partial class Syscalls
 {
     private const string ZwOpenProcessHash = "00B6CA92B16374B1C81FC54DFE03DF52";
     
+    private static int NtOpenProcessJit() {  return 5; }
+
     public static NTSTATUS NtOpenProcess(
         HANDLE* processHandle,
         uint desiredAccess,
@@ -13,19 +15,10 @@ public static unsafe partial class Syscalls
         CLIENT_ID* clientId)
     {
         var stub = GetSyscallStub(ZwOpenProcessHash);
-
         fixed (byte* buffer = stub)
         {
-            var ptr = (IntPtr)buffer;
-            var size = new IntPtr(stub.Length);
+            IntPtr ptr = PrepareJit(nameof(NtOpenProcessJit), buffer, stub.Length);
             
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
-
             var ntOpenProcess = Marshal.GetDelegateForFunctionPointer<ZwOpenProcess>(ptr);
             
             var status = ntOpenProcess(
@@ -33,13 +26,6 @@ public static unsafe partial class Syscalls
                 desiredAccess, 
                 objectAttributes,
                 clientId);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

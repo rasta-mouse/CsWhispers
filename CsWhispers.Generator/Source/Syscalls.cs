@@ -1,10 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Runtime.CompilerServices;
+using System.Reflection;
 
 namespace CsWhispers;
 
-public static partial class Syscalls
+public unsafe static partial class Syscalls
 {
     private const long Key = 0xdeadbeef;
     private static readonly List<SYSCALL_ENTRY> SyscallList = [];
@@ -17,6 +19,32 @@ public static partial class Syscalls
         0x41, 0xFF, 0xE3 				       	                    // jmp r11
     ];
 
+    private unsafe static IntPtr PrepareJit(string func, byte* buffer, int length) 
+    {
+        IntPtr ptr;
+        MethodInfo method = typeof(Syscalls).GetMethod(func, BindingFlags.Static | BindingFlags.NonPublic);
+        RuntimeHelpers.PrepareMethod(method.MethodHandle);
+
+        IntPtr pMethod = method.MethodHandle.GetFunctionPointer();
+        if (Marshal.ReadByte(pMethod) != 0xe9)
+        {
+            ptr = pMethod;
+        }
+        else
+        {
+            Int32 offset = Marshal.ReadInt32(pMethod, 1);
+            UInt64 addr = (UInt64)pMethod + (UInt64)offset;
+            while (addr % 16 != 0) addr++;
+            ptr = (IntPtr)addr;
+        }
+
+        for (int i = 0; i < length; i++)
+        {
+            *(byte*)IntPtr.Add(ptr, i) = *(byte*)(IntPtr.Add((IntPtr)buffer, i));
+        }
+
+        return ptr;
+    }
     private static byte[] GetSyscallStub(string functionHash)
     {
         var ssn = GetSyscallNumber(functionHash);
