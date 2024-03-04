@@ -20,7 +20,7 @@ public static unsafe partial class Syscalls
             IntPtr ptr = PrepareJit(nameof(NtOpenProcessJit), buffer, stub.Length);
             
             var ntOpenProcess = Marshal.GetDelegateForFunctionPointer<ZwOpenProcess>(ptr);
-            
+
             var status = ntOpenProcess(
                 processHandle, 
                 desiredAccess, 

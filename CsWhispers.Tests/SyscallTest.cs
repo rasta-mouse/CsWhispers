@@ -7,10 +7,67 @@ namespace CsWhispers.Tests;
 public sealed class SyscallTest
 {
     [Fact]
+    public static unsafe void OpenProcess_Hooked()
+    {
+        IntPtr pNtOpenProcess = Generic.GetExportAddress(Generic.GetLoadedModuleAddress("ntdll.dll"), "NtOpenProcess");
+        IntPtr ogNtOpenProcess = pNtOpenProcess;
+
+        var size = 0;
+        if (IntPtr.Size == 8)
+            size = 0x14;
+        else
+            size = 0xC;
+
+        byte[] patch = new byte[size];
+        byte[] ogBytes = new byte[size];
+
+        uint OldProtect = 0;
+        uint RegionSize = 0x14;
+        NTSTATUS status;
+        status = NtProtectVirtualMemory(
+            new HANDLE((IntPtr)(-1)),
+            &pNtOpenProcess,
+            &RegionSize,
+            PAGE_EXECUTE_READWRITE,
+            &OldProtect);
+
+        pNtOpenProcess = ogNtOpenProcess;
+
+        Marshal.Copy(pNtOpenProcess, ogBytes, 0, size);
+        Marshal.Copy(patch, 0, pNtOpenProcess, size);
+
+        using var self = Process.GetCurrentProcess();
+
+        HANDLE hProcess;
+        OBJECT_ATTRIBUTES oa;
+
+        // IDK WHY WOW64 NEEDS THIS TO BE FILLED I WASTED 5 HOURS ON THIS
+        if (IntPtr.Size == 4)
+        {
+            oa.Length = (uint)sizeof(OBJECT_ATTRIBUTES);
+        }
+        CLIENT_ID cid = new()
+        {
+            UniqueProcess = new((IntPtr)self.Id)
+        };
+
+        status = NtOpenProcess(
+            &hProcess,
+            PROCESS_ALL_ACCESS,
+            &oa,
+            &cid);
+
+        Assert.Equal(NTSTATUS.Severity.Success, status.SeverityCode);
+        Assert.NotEqual(HANDLE.Null, hProcess);
+
+        Marshal.Copy(ogBytes, 0, pNtOpenProcess, size);
+    }
+
+    [Fact]
     public static unsafe void OpenProcess()
     {
         using var self = Process.GetCurrentProcess();
-
+        
         NTSTATUS status;
         HANDLE hProcess;
         OBJECT_ATTRIBUTES oa;
@@ -19,7 +76,11 @@ public sealed class SyscallTest
         {
             UniqueProcess = new((IntPtr)self.Id)
         };
-
+        // IDK WHY WOW64 NEEDS THIS TO BE FILLED I WASTED 5 HOURS ON THIS
+        if (IntPtr.Size == 4)
+        {
+            oa.Length = (uint)sizeof(OBJECT_ATTRIBUTES);
+        }
         status = NtOpenProcess(
             &hProcess,
             PROCESS_ALL_ACCESS,
@@ -380,6 +441,8 @@ public sealed class SyscallTest
             Assert.Equal(NTSTATUS.Severity.Success, status.SeverityCode);
             Assert.NotEqual(HANDLE.Null, hFile);
 
+            status = NtClose(hFile);
+            Assert.Equal(NTSTATUS.Severity.Success, status.SeverityCode);
         }
     }
 

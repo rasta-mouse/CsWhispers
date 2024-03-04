@@ -18,7 +18,8 @@
         <Title>CsWhispers</Title>
         <Description>Source generator to add D/Invoke and indirect syscall methods to a C# project.</Description>
         <Copyright>Copyright (c) Daniel Duggan 2024</Copyright>
-        <Configurations>Debug;Release;x64</Configurations>
+        <Configurations>Debug</Configurations>
+        <Platforms>AnyCPU;x86</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,14 +27,6 @@
     </ItemGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)'=='x64'">
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
