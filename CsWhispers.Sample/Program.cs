@@ -11,13 +11,13 @@ internal static unsafe class Program
         NTSTATUS status;
         HANDLE hProcess;
         OBJECT_ATTRIBUTES oa;
-        
+
         // read shellcode
         var shellcode = File.ReadAllBytes(@"C:\Payloads\msgbox.bin");
-        
+
         // inject into self
         using var self = Process.GetCurrentProcess();
-        
+
         var cid = new CLIENT_ID
         {
             UniqueProcess = new HANDLE((IntPtr)self.Id)
@@ -28,11 +28,11 @@ internal static unsafe class Program
             PROCESS_ALL_ACCESS,
             &oa,
             &cid);
-        
+
         // allocate memory
         void* baseAddress;
         var szShellcode = (uint)shellcode.Length;
-        
+
         status = NtAllocateVirtualMemory(
             hProcess,
             &baseAddress,
@@ -69,5 +69,7 @@ internal static unsafe class Program
             0,
             0,
             null);
+
+        Console.ReadKey();
     }
 }

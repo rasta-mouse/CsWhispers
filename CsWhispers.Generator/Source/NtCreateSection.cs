@@ -6,6 +6,8 @@ public static unsafe partial class Syscalls
 {
     private const string ZwCreateSectionHash = "12C4C6E5EB9B290330CA3A7E5D43D0FA";
 
+    private static int NtCreateSectionJit() { return 5; }
+
     public static NTSTATUS NtCreateSection(
         HANDLE* sectionHandle,
         uint desiredAccess,
@@ -19,15 +21,7 @@ public static unsafe partial class Syscalls
 
         fixed (byte* buffer = stub)
         {
-            var ptr = (IntPtr)buffer;
-            var size = new IntPtr(stub.Length);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtCreateSectionJit), buffer, stub.Length);
 
             var ntCreateSection = Marshal.GetDelegateForFunctionPointer<ZwCreateSection>(ptr);
 
@@ -39,13 +33,6 @@ public static unsafe partial class Syscalls
                 sectionPageProtection,
                 allocationAttributes,
                 fileHandle);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

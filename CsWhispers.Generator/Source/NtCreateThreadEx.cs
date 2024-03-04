@@ -5,7 +5,9 @@ namespace CsWhispers;
 public static unsafe partial class Syscalls
 {
     private const string ZwCreateThreadExHash = "434AE47989589026C54B874E5D12D365";
-    
+
+    private static int NtCreateThreadExJit() { return 5; }
+
     public static NTSTATUS NtCreateThreadEx(
         HANDLE* threadHandle,
         uint desiredAccess,
@@ -23,15 +25,7 @@ public static unsafe partial class Syscalls
 
         fixed (byte* buffer = stub)
         {
-            var ptr = (IntPtr)buffer;
-            var size = new IntPtr(stub.Length);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtCreateThreadExJit), buffer, stub.Length);
 
             var ntCreateThreadEx = Marshal.GetDelegateForFunctionPointer<ZwCreateThreadEx>(ptr);
 
@@ -47,13 +41,6 @@ public static unsafe partial class Syscalls
                 stackSize, 
                 maximumStackSize, 
                 attributeList);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

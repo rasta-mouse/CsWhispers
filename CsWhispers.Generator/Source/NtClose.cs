@@ -4,7 +4,9 @@ namespace CsWhispers;
 
 public static unsafe partial class Syscalls
 {
-    private const string ZwCloseHash = "F11693417BD581AAA27083765DB7A812";
+    private const string ZwCloseHash = "D5E973CE71E99CE43DB3C3FFFFEB4623";
+
+    private static int NtCloseJit() { return 5; }
 
     public static NTSTATUS NtClose(HANDLE handle)
     {
@@ -12,26 +14,11 @@ public static unsafe partial class Syscalls
 
         fixed (byte* buffer = stub)
         {
-            var ptr = (IntPtr)buffer;
-            var size = new IntPtr(stub.Length);
-            
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtCloseJit), buffer, stub.Length);
 
             var ntClose = Marshal.GetDelegateForFunctionPointer<ZwClose>(ptr);
             
             var status = ntClose(handle);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

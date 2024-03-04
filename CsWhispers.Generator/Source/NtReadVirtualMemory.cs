@@ -6,6 +6,8 @@ public static unsafe partial class Syscalls
 {
     private const string ZwReadVirtualMemoryHash = "A2EAF21913E6BA93656FC0BEC4F1B7B1";
 
+    private static int NtReadVirtualMemoryJit() { return 5; }
+
     public static NTSTATUS NtReadVirtualMemory(
         HANDLE processHandle,
         void* baseAddress,
@@ -17,15 +19,7 @@ public static unsafe partial class Syscalls
 
         fixed (byte* temp = stub)
         {
-            var ptr = (IntPtr)temp;
-            var size = new IntPtr(stub.Length);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                0x00000020,
-                out var oldProtect);
+            IntPtr ptr = PrepareJit(nameof(NtReadVirtualMemoryJit), temp, stub.Length);
 
             var ntReadVirtualMemory = Marshal.GetDelegateForFunctionPointer<ZwReadVirtualMemory>(ptr);
 
@@ -35,13 +29,6 @@ public static unsafe partial class Syscalls
                 buffer,
                 numberOfBytesToRead,
                 numberOfBytesRead);
-
-            Native.NtProtectVirtualMemory(
-                new HANDLE((IntPtr)(-1)),
-                ref ptr,
-                ref size,
-                oldProtect,
-                out _);
 
             return status;
         }

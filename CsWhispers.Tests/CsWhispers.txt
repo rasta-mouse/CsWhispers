@@ -1,4 +1,16 @@
 NtOpenProcess
+NtAllocateVirtualMemory
+NtProtectVirtualMemory
+NtFreeVirtualMemory
+NtWriteVirtualMemory
+NtReadVirtualMemory
+NtQueryVirtualMemory
+NtCreateThreadEx
+NtOpenFile
+NtClose
+NtCreateSection
+NtMapViewOfSection
+NtUnmapViewOfSection
 
 NTSTATUS
 HANDLE
@@ -7,3 +19,9 @@ CLIENT_ID
 UNICODE_STRING
 PWSTR
 PCWSTR
+MEMORY_INFORMATION_CLASS
+MEMORY_BASIC_INFORMATION
+USER_THREAD_START_ROUTINE
+PS_ATTRIBUTE_LIST
+IO_STATUS_BLOCK
+SECTION_INHERIT
